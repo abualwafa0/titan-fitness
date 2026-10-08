@@ -1,0 +1,41 @@
+<div class="row-menu" appClickOutside (clickOutside)="close()">
+  <button
+    type="button"
+    class="icon-btn trigger"
+    aria-label="Row actions"
+    aria-haspopup="menu"
+    [attr.aria-expanded]="isOpen()"
+    (click)="toggle($event)"
+  >
+    <app-icon name="more-vertical" [size]="18" />
+  </button>
+
+  @if (isOpen()) {
+    <div
+      class="panel"
+      role="menu"
+      [style.top.px]="panelTop()"
+      [style.right.px]="panelRight()"
+    >
+      @for (item of items(); track item.id) {
+        <span
+          class="item-wrap"
+          [matTooltip]="item.disabledReason ?? ''"
+          [matTooltipDisabled]="!item.disabled || !item.disabledReason"
+          matTooltipPosition="left"
+        >
+          <button
+            type="button"
+            class="item"
+            role="menuitem"
+            [class.disabled]="item.disabled"
+            [attr.aria-disabled]="item.disabled ? 'true' : null"
+            (click)="select(item)"
+          >
+            {{ item.label }}
+          </button>
+        </span>
+      }
+    </div>
+  }
+</div>

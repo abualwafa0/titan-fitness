@@ -1,0 +1,64 @@
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          <app-sort-header column="name" label="Plan Name"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="price" label="Price"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="duration" label="Duration"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>Freeze Allowance</th>
+        <th>
+          <app-sort-header column="guestPasses" label="Guest Passes"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="access" label="Access"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="status" label="Status"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th class="col-actions">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (plan of plans(); track plan.planId) {
+        <tr>
+          <td>
+            <a class="name-link" [routerLink]="['/plans', plan.planId]"
+              [innerHTML]="plan.planName | highlight: searchTerm()"></a>
+          </td>
+          <td class="nowrap">{{ plan.price | currency }}</td>
+          <td class="nowrap">{{ plan.durationInMonths | durationLabel }}</td>
+          <td class="nowrap">
+            {{ plan.maximumFreezeDays | freezeAllowance: plan.maximumNumberOfFreezes }}
+          </td>
+          <td>{{ plan.guestPassQuota }}</td>
+          <td class="nowrap">{{ accessLabel(plan.accessScope) }}</td>
+          <td>
+            <app-status-badge [status]="plan.isPublished ? 'Published' : 'Retired'" />
+          </td>
+          <td class="col-actions">
+            <app-row-menu [items]="menuItems" (itemSelected)="onAction(plan, $event)" />
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

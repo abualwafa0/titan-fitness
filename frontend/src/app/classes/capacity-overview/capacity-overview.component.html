@@ -1,0 +1,19 @@
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">Capacity Overview</h2>
+  </div>
+
+  <div class="card-body stats">
+    <div class="stat">
+      <app-icon name="users" [size]="16" />
+      <strong class="value">{{ totalBookings() }}</strong>
+      <span class="muted">Total Bookings</span>
+    </div>
+
+    <div class="stat">
+      <app-icon name="chart" [size]="16" />
+      <strong class="value">{{ roundedRate() }}%</strong>
+      <span class="muted">Avg Fill Rate</span>
+    </div>
+  </div>
+</div>

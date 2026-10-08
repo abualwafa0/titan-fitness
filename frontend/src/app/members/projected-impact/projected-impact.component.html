@@ -1,0 +1,54 @@
+<div class="card">
+  <div class="card-header head">
+    <app-icon name="chart" [size]="18" />
+    <h2 class="card-title">Projected Impact</h2>
+  </div>
+
+  <div class="card-body">
+    <dl class="rows">
+      <div class="row-line">
+        <dt class="muted">Original End Date</dt>
+        <dd>
+          @if (originalEndDate()) {
+            {{ originalEndDate() | date: 'MMM d, y' }}
+          } @else {
+            —
+          }
+        </dd>
+      </div>
+
+      <div class="row-line">
+        <dt class="muted">Freeze Duration</dt>
+        <dd>{{ durationText() }}</dd>
+      </div>
+
+      <div class="row-line highlight">
+        <dt>New End Date</dt>
+        <dd>
+          @if (newEndDate()) {
+            {{ newEndDate() | date: 'MMM d, y' }}
+          } @else {
+            —
+          }
+        </dd>
+      </div>
+    </dl>
+
+    <p class="note muted">
+      * Billing will automatically pause during the freeze period and resume upon reactivation.
+    </p>
+
+    <div class="stack">
+      <button type="button" class="btn btn-primary btn-block"
+        [disabled]="!canConfirm() || saving()" (click)="confirm.emit()">
+        <app-icon name="snowflake" [size]="16" />
+        <span>Confirm Freeze</span>
+      </button>
+
+      <button type="button" class="btn btn-outline btn-block" [disabled]="saving()"
+        (click)="cancelled.emit()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

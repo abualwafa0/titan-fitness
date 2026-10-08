@@ -1,0 +1,46 @@
+:host {
+  display: inline-block;
+}
+
+.row-menu {
+  display: inline-block;
+}
+
+.panel {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  min-width: 190px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+}
+
+.item-wrap {
+  display: block;
+}
+
+.item {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  text-align: right;
+}
+
+.item:hover:not(.disabled) {
+  background: var(--navy-50);
+}
+
+.item.disabled {
+  color: var(--text-soft);
+  cursor: not-allowed;
+}

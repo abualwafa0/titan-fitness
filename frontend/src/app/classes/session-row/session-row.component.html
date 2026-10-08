@@ -1,0 +1,54 @@
+<div class="row-card" [class.running]="state() === 'InProgress'"
+  [class.cancelled]="state() === 'Cancelled'">
+  <div class="time">
+    <strong class="nowrap">{{ startLabel() }}</strong>
+    <span class="end muted nowrap" [class.always]="showEndTime()">– {{ endLabel() }}</span>
+  </div>
+
+  <div class="info">
+    <div class="name">
+      @if (almostFull()) {
+        <span class="dot" title="Almost full"></span>
+      }
+      <strong [innerHTML]="session().className | highlight: searchTerm()"></strong>
+    </div>
+
+    <div class="meta muted">
+      <span class="meta-item">
+        <app-icon name="user" [size]="13" />
+        @if (session().trainerName) {
+          <span [innerHTML]="session().trainerName | highlight: searchTerm()"></span>
+        } @else {
+          <span>No trainer</span>
+        }
+      </span>
+
+      @if (session().studioName) {
+        <span class="meta-item">
+          <app-icon name="pin" [size]="13" />
+          <span [innerHTML]="session().studioName | highlight: searchTerm()"></span>
+        </span>
+      }
+
+      @if (showBranch()) {
+        <span class="meta-item">{{ session().branchName }}</span>
+      }
+    </div>
+  </div>
+
+  <app-status-badge [status]="state()" />
+
+  <div class="fill">
+    <span class="count">{{ session().bookedPlaces }} / {{ session().capacityLimit }}</span>
+
+    <div class="progress" [class.hot]="almostFull()">
+      <span [style.width.%]="percent()"></span>
+    </div>
+
+    @if (session().waitlistCount > 0) {
+      <span class="waitlist muted">Waitlist: {{ session().waitlistCount }}</span>
+    }
+  </div>
+
+  <app-row-menu [items]="menuItems()" (itemSelected)="onAction($event)" />
+</div>

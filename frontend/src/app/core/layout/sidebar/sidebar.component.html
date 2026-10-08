@@ -1,0 +1,33 @@
+<aside class="sidebar">
+  <div class="brand">
+    <span class="brand-mark">
+      <app-icon name="logo" [size]="20" />
+    </span>
+
+    <div class="brand-text">
+      <span class="brand-name">Titan Fitness</span>
+      <span class="brand-sub">Staff Portal</span>
+    </div>
+  </div>
+
+  <button type="button" class="new-checkin" (click)="openCheckIn()">
+    <app-icon name="plus" [size]="14" />
+    <span>New Check-in</span>
+  </button>
+
+  <nav class="nav" aria-label="Main navigation">
+    @for (item of visibleItems(); track item.path) {
+      <a class="nav-item" [routerLink]="item.path" routerLinkActive="active">
+        <app-icon [name]="item.icon" [size]="18" />
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <div class="sidebar-footer">
+    <span class="help">
+      <app-icon name="help" [size]="16" />
+      <span>Help Center</span>
+    </span>
+  </div>
+</aside>

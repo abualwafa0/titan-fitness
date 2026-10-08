@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.name-link {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.name-link:hover {
+  color: var(--navy-800);
+  text-decoration: underline;
+}

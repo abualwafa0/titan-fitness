@@ -1,0 +1,43 @@
+<div class="dialog-header">
+  <h2 class="dialog-title">Filter Members</h2>
+  <button type="button" class="icon-btn" aria-label="Close" (click)="cancel()">
+    <app-icon name="close" [size]="18" />
+  </button>
+</div>
+
+<div class="dialog-body">
+  <section class="group">
+    <span class="label">Branch</span>
+    <div class="check-list">
+      @for (branch of branches(); track branch.branchId) {
+        <label class="checkbox-row">
+          <input type="checkbox"
+            [checked]="selectedBranchIds().includes(branch.branchId)"
+            (change)="toggleBranch(branch.branchId)" />
+          <span>{{ branch.branchName }}</span>
+        </label>
+      }
+    </div>
+  </section>
+
+  <section class="group">
+    <span class="label">Status</span>
+    <div class="check-list inline">
+      @for (status of statusOptions; track status) {
+        <label class="checkbox-row">
+          <input type="checkbox"
+            [checked]="selectedStatuses().includes(status)"
+            (change)="toggleStatus(status)" />
+          <span>{{ status }}</span>
+        </label>
+      }
+    </div>
+  </section>
+</div>
+
+<div class="dialog-footer">
+  <button type="button" class="btn btn-outline" (click)="clear()">Clear</button>
+  <span class="spacer"></span>
+  <button type="button" class="btn btn-outline" (click)="cancel()">Cancel</button>
+  <button type="button" class="btn btn-primary" (click)="apply()">Apply</button>
+</div>

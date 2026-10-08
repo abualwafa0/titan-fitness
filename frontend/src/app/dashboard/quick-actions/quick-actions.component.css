@@ -1,0 +1,68 @@
+:host {
+  display: block;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e2e6ef);
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.action:hover {
+  background: var(--navy-100);
+  border-color: var(--navy-800);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--navy-800);
+  outline-offset: 2px;
+}
+
+.action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--navy-100);
+  color: var(--navy-800);
+}
+
+.action-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.action-text strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.action-text small {
+  color: var(--text-muted);
+  font-size: 12px;
+}

@@ -1,0 +1,157 @@
+<div class="page">
+  <app-page-header
+    [title]="title()"
+    [subtitle]="subtitle()"
+    backLink="/plans"
+    backLabel="Back to list"
+    [backQueryParams]="backQueryParams">
+    @if (loadState() === 'ready') {
+      <span pageBadge class="mode-badge">{{ modeLabel() }}</span>
+    }
+
+    @if (loadState() === 'ready') {
+      @if (mode() === 'view') {
+        <button type="button" class="btn btn-primary" (click)="startEdit()">
+          <app-icon name="pencil" [size]="16" />
+          <span>Edit Plan</span>
+        </button>
+      }
+    }
+  </app-page-header>
+
+  @switch (loadState()) {
+    @case ('loading') {
+      <div class="card">
+        <app-state-message kind="loading" message="Loading plan..." />
+      </div>
+    }
+
+    @case ('notFound') {
+      <div class="card">
+        <app-state-message kind="empty" message="Plan not found." />
+      </div>
+    }
+
+    @case ('error') {
+      <div class="card">
+        <app-state-message kind="error" message="Could not load the plan."
+          (retry)="load()" />
+      </div>
+    }
+
+    @default {
+      <form class="stack-lg" [formGroup]="form" (ngSubmit)="save()" novalidate>
+        @if (mode() === 'edit') {
+          <div class="banner banner-warning" role="status">
+            Changes to this plan apply to new purchases only.
+            {{ soldCount() }} active memberships keep the terms they were sold.
+          </div>
+        }
+
+        @if (banner().length > 0) {
+          <div class="banner banner-error" role="alert">
+            @for (message of banner(); track message) {
+              <div>{{ message }}</div>
+            }
+          </div>
+        }
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Plan Details</h2>
+          </div>
+
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="field">
+                <label class="label required" for="planName">Plan name</label>
+                <input id="planName" class="input" type="text" formControlName="planName"
+                  placeholder="e.g., Annual Pro" maxlength="60" autocomplete="off" />
+                <app-field-error [control]="form.controls.planName" label="Plan name" />
+              </div>
+
+              <div class="field">
+                <label class="label required" for="price">Price</label>
+                <input id="price" class="input" type="number" formControlName="price"
+                  placeholder="0.00" min="0" step="0.01" appTwoDecimals />
+                <app-field-error [control]="form.controls.price" label="Price" />
+              </div>
+
+              <div class="field">
+                <label class="label required" for="durationInMonths">Duration in months</label>
+                <input id="durationInMonths" class="input" type="number"
+                  formControlName="durationInMonths" placeholder="e.g., 12" min="1" max="36" step="1" />
+                <app-field-error [control]="form.controls.durationInMonths" label="Duration" />
+              </div>
+
+              <div class="field">
+                <span class="label">Status</span>
+                <label class="checkbox-row status-row">
+                  <input type="checkbox" formControlName="isPublished" />
+                  <span>IsPublished</span>
+                </label>
+                @if (mode() !== 'view') {
+                  <p class="hint">Ticked means true, unticked means false.</p>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Terms Offered</h2>
+          </div>
+
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="field">
+                <label class="label" for="maximumFreezeDays">Maximum freeze days</label>
+                <input id="maximumFreezeDays" class="input" type="number"
+                  formControlName="maximumFreezeDays" placeholder="0" min="0" step="1" />
+                <app-field-error [control]="form.controls.maximumFreezeDays" label="Maximum freeze days" />
+              </div>
+
+              <div class="field">
+                <label class="label" for="maximumNumberOfFreezes">Maximum number of freezes</label>
+                <input id="maximumNumberOfFreezes" class="input" type="number"
+                  formControlName="maximumNumberOfFreezes" placeholder="0" min="0" step="1" />
+                <app-field-error [control]="form.controls.maximumNumberOfFreezes"
+                  label="Maximum number of freezes" />
+              </div>
+
+              <div class="field">
+                <label class="label" for="guestPassQuota">Guest pass quota</label>
+                <input id="guestPassQuota" class="input" type="number"
+                  formControlName="guestPassQuota" placeholder="0" min="0" step="1" />
+                <app-field-error [control]="form.controls.guestPassQuota" label="Guest pass quota" />
+              </div>
+
+              <div class="field">
+                <span class="label">Access scope</span>
+                <app-option-group
+                  variant="radio-card"
+                  [options]="accessOptions"
+                  [disabled]="mode() === 'view'"
+                  [value]="accessScope()"
+                  (valueChange)="onAccessChange($event)" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        @if (mode() !== 'view') {
+          <div class="actions">
+            <button type="button" class="btn btn-outline" [disabled]="saving()" (click)="cancel()">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="saving()">
+              <app-icon name="check" [size]="16" />
+              <span>{{ mode() === 'add' ? 'Save Plan' : 'Save Changes' }}</span>
+            </button>
+          </div>
+        }
+      </form>
+    }
+  }
+</div>

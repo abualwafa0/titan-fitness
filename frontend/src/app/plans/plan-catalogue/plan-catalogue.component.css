@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+
+.btn .count-badge {
+  margin-left: 2px;
+}

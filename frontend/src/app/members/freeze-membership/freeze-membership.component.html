@@ -1,0 +1,121 @@
+<div class="page">
+  <div class="page-head">
+    <div>
+      <a class="back-link" [routerLink]="['/members', profile()?.memberId ?? 0]">
+        <app-icon name="arrow-left" [size]="14" />
+        <span>Back to Member Profile</span>
+      </a>
+      <h1 class="page-title">Freeze Membership</h1>
+      <p class="page-subtitle">Temporarily suspend a membership contract.</p>
+    </div>
+  </div>
+
+  @switch (loadState()) {
+    @case ('loading') {
+      <div class="card"><app-state-message kind="loading" message="Loading membership..." /></div>
+    }
+
+    @case ('notFound') {
+      <div class="card"><app-state-message kind="empty" message="Member not found." /></div>
+    }
+
+    @case ('noMembership') {
+      <div class="card">
+        <app-state-message kind="empty" message="This member has no membership to freeze." />
+      </div>
+    }
+
+    @case ('error') {
+      <div class="card">
+        <app-state-message kind="error" message="Could not load the membership." (retry)="load()" />
+      </div>
+    }
+
+    @default {
+      @if (context(); as ctx) {
+        <div class="layout">
+          <div class="column">
+            <div class="card">
+              <div class="card-body summary">
+                <app-avatar [name]="ctx.memberName" [photo]="profile()?.photo ?? null" [size]="56" />
+
+                <div class="who">
+                  <strong class="name">{{ ctx.memberName }}</strong>
+                  <span class="muted">{{ idLine() }}</span>
+                  <span class="muted">Current End Date: {{ ctx.endDate | date: 'MMM d, y' }}</span>
+                </div>
+
+                <app-status-badge [status]="ctx.status" />
+              </div>
+            </div>
+
+            @if (readOnlyReason(); as reason) {
+              <div class="banner banner-warning" role="status">{{ reason }}</div>
+            }
+
+            @if (banner().length > 0) {
+              <div class="banner banner-error" role="alert">
+                @for (message of banner(); track message) {
+                  <div>{{ message }}</div>
+                }
+              </div>
+            }
+
+            <form class="card" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+              <div class="card-header">
+                <h2 class="card-title">Freeze Parameters</h2>
+              </div>
+
+              <div class="card-body fields">
+                <div class="field">
+                  <label class="label required" for="startDate">Start Date</label>
+                  <input id="startDate" class="input" type="date" formControlName="startDate"
+                    [min]="today" />
+                  <app-field-error [control]="form.controls.startDate" label="Start date" />
+                </div>
+
+                <div class="field">
+                  <span class="label required">Duration (Months)</span>
+                  <app-option-group variant="toggle" [options]="durationOptions()"
+                    [disabled]="readOnlyReason() !== null" [value]="duration()"
+                    (valueChange)="onDuration($event)" />
+                </div>
+
+                <div class="field">
+                  <label class="label required" for="reason">Reason for Freeze</label>
+                  <select id="reason" class="select" formControlName="reason">
+                    <option value="" disabled>Select a reason</option>
+                    @for (reason of reasons; track reason.value) {
+                      <option [value]="reason.value">{{ reason.label }}</option>
+                    }
+                  </select>
+                  <app-field-error [control]="form.controls.reason" label="Reason" />
+                </div>
+
+                <div class="field">
+                  <label class="label" for="additionalNotes">
+                    Additional Notes <span class="optional">(Optional)</span>
+                  </label>
+                  <textarea id="additionalNotes" class="textarea" rows="4" maxlength="500"
+                    formControlName="additionalNotes"
+                    placeholder="Enter any relevant details..."></textarea>
+                  <span class="counter">{{ notesLength() }}/500</span>
+                  <app-field-error [control]="form.controls.additionalNotes" label="Notes" />
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <app-projected-impact
+            [originalEndDate]="ctx.endDate"
+            [durationMonths]="duration()"
+            [newEndDate]="newEndDate()"
+            [canConfirm]="canConfirm()"
+            [saving]="saving()"
+            (confirm)="confirm()"
+            (cancelled)="cancel()" />
+        </div>
+      }
+    }
+  }
+</div>

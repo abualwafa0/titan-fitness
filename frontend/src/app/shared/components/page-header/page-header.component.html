@@ -1,0 +1,23 @@
+<div class="page-head">
+  <div class="head-text">
+    @if (backLink(); as link) {
+      <a class="back-link" [routerLink]="link" [queryParams]="backQueryParams()">
+        <app-icon name="arrow-left" [size]="14" />
+        <span>{{ backLabel() }}</span>
+      </a>
+    }
+
+    <div class="title-row">
+      <h1 class="page-title">{{ title() }}</h1>
+      <ng-content select="[pageBadge]" />
+    </div>
+
+    @if (subtitle()) {
+      <p class="page-subtitle">{{ subtitle() }}</p>
+    }
+  </div>
+
+  <div class="actions">
+    <ng-content />
+  </div>
+</div>

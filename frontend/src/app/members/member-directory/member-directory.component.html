@@ -1,0 +1,43 @@
+<div class="page">
+  <app-page-header title="Member Directory" subtitle="Manage and view all registered members.">
+    <button type="button" class="btn btn-outline" (click)="openFilter()">
+      <app-icon name="filter" [size]="16" />
+      <span>Filter</span>
+      @if (activeFilterCount() > 0) {
+        <span class="count-badge">{{ activeFilterCount() }}</span>
+      }
+    </button>
+
+    <button type="button" class="btn btn-primary" (click)="openAddMember()">
+      <app-icon name="plus" [size]="16" />
+      <span>Add Member</span>
+    </button>
+  </app-page-header>
+
+  <div class="card">
+    @if (loading()) {
+      <app-state-message kind="loading" message="Loading members..." />
+    } @else if (failed()) {
+      <app-state-message kind="error" message="Could not load the members."
+        (retry)="reload()" />
+    } @else if (members().length === 0) {
+      <app-state-message kind="empty"
+        [message]="hasCriteria() ? 'No members match your search or filters.' : 'No members yet.'" />
+    } @else {
+      <app-member-table
+        [members]="members()"
+        [searchTerm]="search()"
+        [sortBy]="sortBy()"
+        [sortDirection]="sortDirection()"
+        (sortChange)="onSort($event)" />
+
+      <div class="card-footer">
+        <app-paginator
+          [total]="totalCount()"
+          [page]="page()"
+          [pageSize]="10"
+          (pageChange)="onPageChange($event)" />
+      </div>
+    }
+  </div>
+</div>

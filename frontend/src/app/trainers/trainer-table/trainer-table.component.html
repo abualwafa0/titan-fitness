@@ -1,0 +1,68 @@
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          <app-sort-header column="name" label="Trainer Name"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="number" label="ID"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="specialty" label="Specialty"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="branch" label="Branch"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="status" label="Status"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th class="col-actions">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (trainer of trainers(); track trainer.trainerId) {
+        <tr>
+          <td>
+            <div class="name-cell">
+              <app-avatar [name]="trainer.trainerName" [size]="34" />
+              <a class="name-link" [routerLink]="['/trainers', trainer.trainerId]"
+                [innerHTML]="trainer.trainerName | highlight: searchTerm()"></a>
+            </div>
+          </td>
+
+          <td class="muted nowrap" [innerHTML]="idLabel(trainer) | highlight: searchTerm()"></td>
+
+          <td>
+            @if (trainer.specialty) {
+              <span [innerHTML]="trainer.specialty | highlight: searchTerm()"></span>
+            } @else {
+              <span class="muted">—</span>
+            }
+          </td>
+
+          <td>{{ trainer.branchName }}</td>
+
+          <td>
+            <app-status-badge [status]="trainer.isActive ? 'Active' : 'Inactive'" />
+          </td>
+
+          <td class="col-actions">
+            <app-row-menu [items]="menuItems" (itemSelected)="onAction(trainer, $event)" />
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

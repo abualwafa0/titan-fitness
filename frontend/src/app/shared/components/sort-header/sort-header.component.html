@@ -1,0 +1,11 @@
+<button type="button" class="sort-btn" (click)="onClick()">
+  <span>{{ label() }}</span>
+
+  @if (activeColumn() === column()) {
+    <app-icon
+      name="chevron-down"
+      [size]="12"
+      [style.transform]="direction() === 'asc' ? 'rotate(180deg)' : 'none'"
+    />
+  }
+</button>

@@ -1,0 +1,106 @@
+:host {
+  display: block;
+}
+
+.row-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+:host(:last-child) .row-card {
+  border-bottom: 0;
+}
+
+.row-card:hover {
+  background: var(--navy-50);
+}
+
+.row-card.running {
+  background: var(--navy-50);
+  box-shadow: inset 3px 0 0 var(--navy-800);
+}
+
+.row-card.cancelled .name,
+.row-card.cancelled .meta {
+  opacity: 0.6;
+}
+
+.time {
+  display: flex;
+  flex-direction: column;
+  width: 84px;
+  font-size: 13px;
+}
+
+.end {
+  display: none;
+  font-size: 11px;
+}
+
+.end.always,
+.row-card:hover .end {
+  display: block;
+}
+
+.info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red-700);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 12px;
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fill {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 110px;
+  font-size: 12px;
+}
+
+.count {
+  font-weight: 600;
+}
+
+.progress.hot > span {
+  background: var(--red-700);
+}
+
+.waitlist {
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .row-card {
+    flex-wrap: wrap;
+  }
+}

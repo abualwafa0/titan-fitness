@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid var(--border, #e2e6ef);
+  border-radius: 8px;
+  background: var(--bg, #f7f8fb);
+  color: var(--navy-800);
+}
+
+.value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text, #1b1f2a);
+}
+
+.muted {
+  font-size: 12px;
+}

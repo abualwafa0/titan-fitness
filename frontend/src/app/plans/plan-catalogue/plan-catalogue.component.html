@@ -1,0 +1,43 @@
+<div class="page">
+  <app-page-header title="Plan Catalogue" subtitle="Manage and view all membership plans.">
+    <button type="button" class="btn btn-outline" (click)="openFilter()">
+      <app-icon name="filter" [size]="16" />
+      <span>Filter</span>
+      @if (activeFilterCount() > 0) {
+        <span class="count-badge">{{ activeFilterCount() }}</span>
+      }
+    </button>
+
+    <a class="btn btn-primary" routerLink="/plans/new">
+      <app-icon name="plus" [size]="16" />
+      <span>Add Plan</span>
+    </a>
+  </app-page-header>
+
+  <div class="card">
+    @if (loading()) {
+      <app-state-message kind="loading" message="Loading plans..." />
+    } @else if (failed()) {
+      <app-state-message kind="error" message="Could not load the plans."
+        (retry)="reload()" />
+    } @else if (plans().length === 0) {
+      <app-state-message kind="empty"
+        [message]="hasCriteria() ? 'No plans match your search or filters.' : 'No plans yet.'" />
+    } @else {
+      <app-plan-table
+        [plans]="plans()"
+        [searchTerm]="search()"
+        [sortBy]="sortBy()"
+        [sortDirection]="sortDirection()"
+        (sortChange)="onSort($event)" />
+
+      <div class="card-footer">
+        <app-paginator
+          [total]="totalCount()"
+          [page]="page()"
+          [pageSize]="10"
+          (pageChange)="onPageChange($event)" />
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="state" [class.error]="kind() === 'error'" role="status">
+  @if (kind() === 'loading') {
+    <span class="spinner" aria-hidden="true"></span>
+  }
+
+  <p class="text">{{ text() }}</p>
+
+  @if (kind() === 'error') {
+    <button type="button" class="btn btn-outline" (click)="onRetry()">
+      Retry
+    </button>
+  }
+</div>

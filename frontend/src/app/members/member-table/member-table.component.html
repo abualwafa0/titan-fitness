@@ -1,0 +1,66 @@
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          <app-sort-header column="name" label="Member Name"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="number" label="ID"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="status" label="Status"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="branch" label="Branch"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th>
+          <app-sort-header column="lastVisit" label="Last Visit"
+            [activeColumn]="sortBy()" [direction]="sortDirection()"
+            (sortChange)="sortChange.emit($event)" />
+        </th>
+        <th class="col-actions">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of rows(); track row.member.memberId) {
+        <tr>
+          <td>
+            <div class="name-cell">
+              <app-avatar [name]="row.member.fullName" [size]="34" />
+              <a class="name-link" [routerLink]="['/members', row.member.memberId]"
+                [innerHTML]="row.member.fullName | highlight: searchTerm()"></a>
+            </div>
+          </td>
+
+          <td class="muted nowrap" [innerHTML]="idLabel(row.member) | highlight: searchTerm()"></td>
+
+          <td>
+            @if (row.member.status) {
+              <app-status-badge [status]="row.member.status" />
+            } @else {
+              <span class="muted">—</span>
+            }
+          </td>
+
+          <td>{{ row.member.branchName }}</td>
+
+          <td class="nowrap">{{ row.member.lastVisit | lastVisit }}</td>
+
+          <td class="col-actions">
+            <app-row-menu [items]="row.items" (itemSelected)="onAction(row.member, $event)" />
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

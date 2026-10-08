@@ -1,0 +1,44 @@
+<div class="card identity">
+  <div class="card-body">
+    <div class="top">
+      <app-avatar [name]="profile().fullName" [photo]="profile().photo" [size]="88" />
+
+      @if (profile().status) {
+        <app-status-badge [status]="profile().status ?? ''" />
+      }
+
+      <h2 class="name">{{ profile().fullName }}</h2>
+      <span class="muted">{{ idLabel() }}</span>
+    </div>
+
+    <ul class="details">
+      @if (profile().email) {
+        <li>
+          <app-icon name="mail" [size]="16" />
+          <span>{{ profile().email }}</span>
+        </li>
+      }
+
+      @if (profile().phone) {
+        <li>
+          <app-icon name="phone" [size]="16" />
+          <span>{{ profile().phone }}</span>
+        </li>
+      }
+
+      @if (profile().address) {
+        <li>
+          <app-icon name="pin" [size]="16" />
+          <span>{{ profile().address }}</span>
+        </li>
+      }
+
+      @if (profile().joinedDate) {
+        <li>
+          <app-icon name="calendar" [size]="16" />
+          <span>Joined {{ profile().joinedDate | date: 'MMM d, y' }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+</div>

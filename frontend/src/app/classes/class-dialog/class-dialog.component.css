@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.spaced {
+  margin-bottom: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 20px;
+  margin-bottom: 18px;
+}
+
+.grid.three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.suffix-wrap {
+  position: relative;
+}
+
+.suffix-wrap .input {
+  padding-right: 52px;
+}
+
+.suffix {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.counter {
+  align-self: flex-end;
+}
+
+@media (max-width: 640px) {
+  .grid,
+  .grid.three {
+    grid-template-columns: 1fr;
+  }
+}

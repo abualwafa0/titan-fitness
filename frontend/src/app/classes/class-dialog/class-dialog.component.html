@@ -1,0 +1,165 @@
+<form [formGroup]="form" (ngSubmit)="save()" novalidate>
+  <div class="dialog-header">
+    <h2 class="dialog-title">{{ title() }}</h2>
+    <button type="button" class="icon-btn" aria-label="Close" (click)="cancel()">
+      <app-icon name="close" [size]="18" />
+    </button>
+  </div>
+
+  @if (loadState() === 'loading') {
+    <div class="dialog-body"><app-state-message kind="loading" message="Loading class..." /></div>
+  } @else if (loadState() === 'error') {
+    <div class="dialog-body">
+      <app-state-message kind="error" message="Could not load the class." (retry)="load()" />
+    </div>
+  } @else {
+    <div class="dialog-body" appAutofocus>
+      @if (banner().length > 0) {
+        <div class="banner banner-error spaced" role="alert">
+          @for (message of banner(); track message) {
+            <div>{{ message }}</div>
+          }
+        </div>
+      }
+
+      <div class="grid">
+        <div class="field">
+          <label class="label required" for="className">Class Name</label>
+          <input id="className" class="input" type="text" formControlName="className"
+            placeholder="e.g., High-Intensity Interval Training" maxlength="80" autocomplete="off" />
+          <app-field-error [control]="form.controls.className" label="Class name" />
+        </div>
+
+        <div class="field">
+          <label class="label required" for="branchId">Branch</label>
+          <select id="branchId" class="select" formControlName="branchId">
+            <option [ngValue]="null" disabled>Select a branch</option>
+            @for (branch of branches(); track branch.branchId) {
+              <option [ngValue]="branch.branchId">{{ branch.branchName }}</option>
+            }
+          </select>
+          <app-field-error [control]="form.controls.branchId" label="Branch" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="trainerId">Trainer / Instructor</label>
+          <select id="trainerId" class="select" formControlName="trainerId">
+            <option [ngValue]="null">Select an instructor</option>
+            @for (trainer of trainers(); track trainer.trainerId) {
+              <option [ngValue]="trainer.trainerId">{{ trainer.trainerName }}</option>
+            }
+          </select>
+          <app-field-error [control]="form.controls.trainerId" label="Trainer" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="studioId">Studio / Room</label>
+          <select id="studioId" class="select" formControlName="studioId">
+            <option [ngValue]="null">Assign a room</option>
+            @for (studio of studios(); track studio.studioId) {
+              <option [ngValue]="studio.studioId">{{ studio.studioName }} ({{ studio.capacity }})</option>
+            }
+          </select>
+          <app-field-error [control]="form.controls.studioId" label="Studio" />
+        </div>
+      </div>
+
+      <div class="grid three">
+        <div class="field">
+          <label class="label required" for="sessionDate">Date</label>
+          <input id="sessionDate" class="input" type="date" formControlName="sessionDate"
+            [min]="mode() === 'add' ? today : null" />
+          <app-field-error [control]="form.controls.sessionDate" label="Date" />
+        </div>
+
+        <div class="field">
+          <label class="label required" for="startTime">Start Time</label>
+          <input id="startTime" class="input" type="time" formControlName="startTime" />
+          <app-field-error [control]="form.controls.startTime" label="Start time" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="capacityLimit">Capacity Limit</label>
+          <div class="suffix-wrap">
+            <input id="capacityLimit" class="input" type="number" formControlName="capacityLimit"
+              placeholder="20" min="1" max="100" step="1" />
+            <span class="suffix muted">spots</span>
+          </div>
+
+          @if (mode() === 'view' && context(); as current) {
+            <span class="hint">
+              {{ current.bookedPlaces }} / {{ current.capacityLimit }} enrolled
+              @if (current.waitlistCount > 0) {
+                · Waitlist: {{ current.waitlistCount }}
+              }
+            </span>
+          }
+
+          <app-field-error [control]="form.controls.capacityLimit" label="Capacity" />
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <span class="label">Duration</span>
+          <app-option-group variant="radio-card" [options]="durationOptions"
+            [disabled]="mode() === 'view'" [value]="duration()" (valueChange)="onDuration($event)" />
+        </div>
+
+        <div class="field">
+          <span class="label">Status</span>
+          <span>
+            @if (mode() === 'add') {
+              <app-status-badge status="Active" label="Active (Booking Open)" />
+            } @else {
+              @if (state() === 'Upcoming') {
+                <app-status-badge status="Active" label="Active (Booking Open)" />
+              } @else {
+                <app-status-badge [status]="state()" />
+              }
+            }
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="description">
+          Description <span class="optional">(Optional)</span>
+        </label>
+        <textarea id="description" class="textarea" rows="3" [attr.maxlength]="maxDescription"
+          formControlName="description" placeholder="Add details about the class focus, required equipment, or intensity level..."></textarea>
+        <span class="counter">{{ descriptionLength() }}/{{ maxDescription }}</span>
+        <app-field-error [control]="form.controls.description" label="Description" />
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      @switch (mode()) {
+        @case ('view') {
+          <button type="button" class="btn btn-outline" (click)="cancel()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="startEdit()">
+            <app-icon name="pencil" [size]="16" />
+            <span>Edit</span>
+          </button>
+        }
+
+        @case ('edit') {
+          <button type="button" class="btn btn-outline" [disabled]="saving()" (click)="cancel()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="saving()">Save Changes</button>
+        }
+
+        @default {
+          <button type="button" class="btn btn-outline" [disabled]="saving()" (click)="cancel()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="saving()">
+            <app-icon name="calendar-plus" [size]="16" />
+            <span>Schedule Class</span>
+          </button>
+        }
+      }
+    </div>
+  }
+</form>

@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.group:last-child {
+  margin-bottom: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.radio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.radio-list.inline {
+  flex-direction: row;
+  gap: 24px;
+}
+
+.price-inputs {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.price-inputs .field {
+  flex: 1;
+}
+
+.dash {
+  padding-bottom: 10px;
+  color: var(--text-muted);
+}
+
+.sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sliders input[type='range'] {
+  width: 100%;
+  accent-color: var(--navy-800);
+}
+
+.bounds {
+  display: flex;
+  justify-content: space-between;
+}
+
+.small {
+  font-size: 12px;
+}

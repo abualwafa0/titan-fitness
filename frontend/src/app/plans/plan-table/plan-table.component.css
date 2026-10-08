@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.name-link {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.name-link:hover {
+  color: var(--navy-800);
+  text-decoration: underline;
+}

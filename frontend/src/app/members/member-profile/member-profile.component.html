@@ -1,0 +1,58 @@
+<div class="page">
+  <app-page-header title="Member Profile" backLink="/members" backLabel="Back to members"
+    [backQueryParams]="backQueryParams">
+    @if (loadState() === 'ready') {
+      <button type="button" class="btn btn-outline" (click)="editProfile()">
+        <app-icon name="pencil" [size]="16" />
+        <span>Edit Profile</span>
+      </button>
+    }
+  </app-page-header>
+
+  @switch (loadState()) {
+    @case ('loading') {
+      <div class="card"><app-state-message kind="loading" message="Loading member..." /></div>
+    }
+
+    @case ('notFound') {
+      <div class="card"><app-state-message kind="empty" message="Member not found." /></div>
+    }
+
+    @case ('error') {
+      <div class="card">
+        <app-state-message kind="error" message="Could not load the member." (retry)="load()" />
+      </div>
+    }
+
+    @default {
+      @if (profile(); as current) {
+        <div class="layout">
+          <div class="column">
+            <app-identity-card [profile]="current" />
+
+            @if (membership()) {
+              <app-plan-card [profile]="current" />
+            } @else {
+              <div class="card">
+                <div class="card-body muted">This member has no membership yet.</div>
+              </div>
+            }
+          </div>
+
+          <div class="column">
+            @if (membership(); as plan) {
+              <div class="usage-row">
+                <app-usage-card title="Freezes Used" [used]="plan.freezesUsed"
+                  [total]="plan.maximumNumberOfFreezes" singular="freeze" plural="freezes" />
+                <app-usage-card title="Guest Passes" [used]="plan.guestPassesUsed"
+                  [total]="plan.guestPassQuota" singular="pass" plural="passes" />
+              </div>
+            }
+
+            <app-activity-list [activities]="current.recentActivities" />
+          </div>
+        </div>
+      }
+    }
+  }
+</div>

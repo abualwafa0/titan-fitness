@@ -1,0 +1,15 @@
+<div class="card">
+  <div class="card-body kpi">
+    <div class="top">
+      <span class="muted label">{{ label() }}</span>
+      <span class="icon"><app-icon [name]="icon()" [size]="18" /></span>
+    </div>
+
+    <strong class="value">{{ value() }}</strong>
+
+    @if (note()) {
+      <span class="note" [class.positive]="tone() === 'positive'"
+        [class.negative]="tone() === 'negative'">{{ note() }}</span>
+    }
+  </div>
+</div>

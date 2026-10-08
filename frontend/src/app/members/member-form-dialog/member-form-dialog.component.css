@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.stack-lg {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-banner {
+  margin-bottom: 16px;
+}
+
+.read-only {
+  font-weight: 600;
+}

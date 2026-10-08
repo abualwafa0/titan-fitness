@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.form-banner {
+  margin-bottom: 16px;
+}
+
+.status-row {
+  min-height: 40px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

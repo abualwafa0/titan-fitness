@@ -1,0 +1,54 @@
+:host {
+  display: block;
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--navy-800);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--navy-100);
+  color: var(--navy-800);
+}
+
+.value {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.note {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.note.positive {
+  color: var(--green-700);
+}
+
+.note.negative {
+  color: var(--red-700);
+}

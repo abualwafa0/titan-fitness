@@ -1,0 +1,124 @@
+<div class="page">
+  <app-page-header
+    [title]="title()"
+    [subtitle]="subtitle()"
+    backLink="/trainers"
+    backLabel="Back to list"
+    [backQueryParams]="backQueryParams">
+    @if (loadState() === 'ready') {
+      <span pageBadge class="mode-badge">{{ modeLabel() }}</span>
+    }
+
+    @if (loadState() === 'ready') {
+      @if (mode() === 'view') {
+        <button type="button" class="btn btn-primary" (click)="startEdit()">
+          <app-icon name="pencil" [size]="16" />
+          <span>Edit Trainer</span>
+        </button>
+      }
+    }
+  </app-page-header>
+
+  @switch (loadState()) {
+    @case ('loading') {
+      <div class="card">
+        <app-state-message kind="loading" message="Loading trainer..." />
+      </div>
+    }
+
+    @case ('notFound') {
+      <div class="card">
+        <app-state-message kind="empty" message="Trainer not found." />
+      </div>
+    }
+
+    @case ('error') {
+      <div class="card">
+        <app-state-message kind="error" message="Could not load the trainer."
+          (retry)="load()" />
+      </div>
+    }
+
+    @default {
+      <form class="card" [formGroup]="form" (ngSubmit)="save()" novalidate>
+        <div class="card-header">
+          <h2 class="card-title">Trainer Details</h2>
+        </div>
+
+        <div class="card-body">
+          @if (banner().length > 0) {
+            <div class="banner banner-error form-banner" role="alert">
+              @for (message of banner(); track message) {
+                <div>{{ message }}</div>
+              }
+            </div>
+          }
+
+          <div class="form-grid">
+            <div class="field">
+              <label class="label required" for="trainerName">Trainer name</label>
+              <input id="trainerName" class="input" type="text" formControlName="trainerName"
+                placeholder="e.g., Sarah Jenkins" maxlength="80" autocomplete="off" />
+              <app-field-error [control]="form.controls.trainerName" label="Trainer name" />
+            </div>
+
+            <div class="field">
+              <label class="label" for="specialty">Specialty</label>
+              <input id="specialty" class="input" type="text" formControlName="specialty"
+                placeholder="e.g., HIIT / Strength" maxlength="100" autocomplete="off" />
+              <app-field-error [control]="form.controls.specialty" label="Specialty" />
+            </div>
+
+            <div class="field">
+              <label class="label required" for="branchId">Branch</label>
+              <select id="branchId" class="select" formControlName="branchId">
+                <option [ngValue]="null" disabled>Select a branch</option>
+                @for (branch of branches(); track branch.branchId) {
+                  <option [ngValue]="branch.branchId">{{ branch.branchName }}</option>
+                }
+              </select>
+              <app-field-error [control]="form.controls.branchId" label="Branch" />
+            </div>
+
+            <div class="field">
+              <label class="label required" for="email">Email</label>
+              <input id="email" class="input" type="email" formControlName="email"
+                placeholder="name@titanfitness.com" maxlength="150" autocomplete="off" />
+              <app-field-error [control]="form.controls.email" label="Email" />
+            </div>
+
+            <div class="field">
+              <label class="label" for="phone">Phone</label>
+              <input id="phone" class="input" type="tel" formControlName="phone"
+                placeholder="+1 (555) 000-0000" maxlength="20" autocomplete="off" />
+              <app-field-error [control]="form.controls.phone" label="Phone" />
+            </div>
+
+            <div class="field">
+              <span class="label">Status</span>
+              <label class="checkbox-row status-row">
+                <input type="checkbox" formControlName="isActive" />
+                <span>IsActive</span>
+              </label>
+              @if (mode() !== 'view') {
+                <p class="hint">Ticked means true, unticked means false.</p>
+              }
+            </div>
+          </div>
+        </div>
+
+        @if (mode() !== 'view') {
+          <div class="card-footer actions">
+            <button type="button" class="btn btn-outline" [disabled]="saving()" (click)="cancel()">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="saving()">
+              <app-icon name="check" [size]="16" />
+              <span>{{ mode() === 'add' ? 'Save Trainer' : 'Save Changes' }}</span>
+            </button>
+          </div>
+        }
+      </form>
+    }
+  }
+</div>

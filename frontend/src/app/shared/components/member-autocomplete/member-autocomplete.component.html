@@ -1,0 +1,43 @@
+<div class="picker">
+  <span class="lead">
+    <app-icon name="search" [size]="14" />
+  </span>
+
+  <input
+    type="text"
+    class="input"
+    autocomplete="off"
+    placeholder="Search by name or ID..."
+    [formControl]="searchControl"
+    [matAutocomplete]="auto"
+    (focus)="onFocus()"
+    (input)="onInput($event)"
+  />
+</div>
+
+<mat-autocomplete
+  #auto="matAutocomplete"
+  [displayWith]="displayMember"
+  (optionSelected)="onSelected($event)"
+>
+  @for (item of results(); track item.memberId) {
+    <mat-option [value]="item">
+      <span class="option">
+        <app-avatar [name]="item.fullName" [photo]="item.photo" [size]="28" />
+
+        <span class="option-text">
+          <span class="option-name">{{ item.fullName }}</span>
+          <span class="option-id">#{{ item.membershipNumber }}</span>
+        </span>
+
+        @if (item.status) {
+          <app-status-badge [status]="item.status" />
+        }
+      </span>
+    </mat-option>
+  } @empty {
+    <mat-option disabled>
+      {{ loading() ? 'Searching...' : 'No members found' }}
+    </mat-option>
+  }
+</mat-autocomplete>

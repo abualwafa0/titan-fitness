@@ -1,0 +1,10 @@
+# Backend
+bin/
+obj/
+.vs/
+*.user
+
+# Frontend
+node_modules/
+dist/
+.angular/

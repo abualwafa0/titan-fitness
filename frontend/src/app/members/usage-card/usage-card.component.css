@@ -1,0 +1,20 @@
+:host {
+  display: block;
+}
+
+.usage {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.remaining {
+  font-size: 12px;
+}

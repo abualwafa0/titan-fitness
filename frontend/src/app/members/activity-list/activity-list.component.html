@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header head">
+    <h2 class="card-title">Recent Activity</h2>
+
+    @if (canExpand()) {
+      <button type="button" class="link-btn" (click)="toggle()">
+        {{ expanded() ? 'Show less' : 'View All' }}
+      </button>
+    }
+  </div>
+
+  <div class="card-body">
+    @if (activities().length === 0) {
+      <p class="muted empty">No recent activity.</p>
+    } @else {
+      <ul class="list">
+        @for (item of visible(); track $index) {
+          <li class="item">
+            <span class="icon"><app-icon [name]="iconFor(item.activityType)" [size]="16" /></span>
+
+            <div class="text">
+              <strong>{{ item.title }}</strong>
+              @if (item.details) {
+                <span class="muted">{{ item.details }}</span>
+              }
+            </div>
+
+            <span class="muted when nowrap">
+              <span>{{ dayLabel(item.occurredOn) }}</span>
+              <span>{{ timeLabel(item.occurredOn) }}</span>
+            </span>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>

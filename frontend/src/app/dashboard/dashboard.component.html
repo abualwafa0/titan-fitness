@@ -1,0 +1,29 @@
+<div class="page">
+  <app-page-header title="Dashboard" subtitle="Live floor statistics and quick actions." />
+
+  @if (loading()) {
+    <div class="card"><app-state-message kind="loading" message="Loading dashboard..." /></div>
+  } @else if (failed() && !data()) {
+    <div class="card">
+      <app-state-message kind="error" message="Could not load the dashboard." (retry)="reload()" />
+    </div>
+  } @else {
+    @if (data(); as current) {
+      <div class="layout">
+        <div class="column">
+          <div class="kpis">
+            <app-kpi-card label="Check-ins Today" icon="entry" [value]="current.checkInsToday"
+              [note]="checkInNote()" [tone]="checkInTone()" />
+
+            <app-kpi-card label="Active Members" icon="members" [value]="current.activeMembers"
+              [note]="'Currently on floor: ' + current.membersCurrentlyInside" />
+          </div>
+
+          <app-upcoming-classes [sessions]="sessions()" [searchTerm]="searchTerm()" />
+        </div>
+
+        <app-quick-actions (memberCreated)="reload()" />
+      </div>
+    }
+  }
+</div>

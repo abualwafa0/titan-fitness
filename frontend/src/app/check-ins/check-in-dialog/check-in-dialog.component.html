@@ -1,0 +1,73 @@
+<form [formGroup]="form" (ngSubmit)="save()" novalidate>
+  <div class="dialog-header">
+    <h2 class="dialog-title">New Check-in</h2>
+    <button type="button" class="icon-btn" aria-label="Close" (click)="cancel()">
+      <app-icon name="close" [size]="18" />
+    </button>
+  </div>
+
+  <div class="dialog-body" appAutofocus>
+    @if (refusal(); as reason) {
+      <div class="banner banner-error spaced" role="alert">
+        <strong>Check-in refused.</strong> {{ reason }}
+      </div>
+    }
+
+    @if (banner().length > 0) {
+      <div class="banner banner-error spaced" role="alert">
+        @for (message of banner(); track message) {
+          <div>{{ message }}</div>
+        }
+      </div>
+    }
+
+    <div class="fields">
+      <div class="field">
+        <span class="label required">Member</span>
+        <app-member-autocomplete [(member)]="member" [disabled]="memberLocked" />
+        @if (memberError(); as error) {
+          <span class="error-text">{{ error }}</span>
+        }
+      </div>
+
+      <div class="two">
+        <div class="field">
+          <label class="label required" for="checkInDate">Date</label>
+          <input id="checkInDate" class="input" type="date" formControlName="checkInDate"
+            [min]="oldestDate" [max]="today" />
+          <app-field-error [control]="form.controls.checkInDate" label="Date" />
+        </div>
+
+        <div class="field">
+          <label class="label required" for="checkInTime">Time</label>
+          <input id="checkInTime" class="input" type="time" step="300"
+            formControlName="checkInTime" />
+          <app-field-error [control]="form.controls.checkInTime" label="Time" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="branch">Branch</label>
+        <input id="branch" class="input" type="text" [value]="branchName()" readonly />
+      </div>
+
+      <div class="field">
+        <label class="label" for="notes">Notes <span class="optional">(Optional)</span></label>
+        <textarea id="notes" class="textarea" rows="3" [attr.maxlength]="maxNotes"
+          formControlName="notes" placeholder="Add a note for this check-in..."></textarea>
+        <span class="counter">{{ notesLength() }}/{{ maxNotes }}</span>
+        <app-field-error [control]="form.controls.notes" label="Notes" />
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <button type="button" class="btn btn-outline" [disabled]="saving()" (click)="cancel()">
+      Cancel
+    </button>
+    <button type="submit" class="btn btn-primary" [disabled]="saving()">
+      <app-icon name="user-check" [size]="16" />
+      <span>Check In</span>
+    </button>
+  </div>
+</form>

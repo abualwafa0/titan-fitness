@@ -1,0 +1,43 @@
+<div class="page">
+  <app-page-header title="Trainer Directory" subtitle="Manage and view all trainers.">
+    <button type="button" class="btn btn-outline" (click)="openFilter()">
+      <app-icon name="filter" [size]="16" />
+      <span>Filter</span>
+      @if (activeFilterCount() > 0) {
+        <span class="count-badge">{{ activeFilterCount() }}</span>
+      }
+    </button>
+
+    <a class="btn btn-primary" routerLink="/trainers/new">
+      <app-icon name="plus" [size]="16" />
+      <span>Add Trainer</span>
+    </a>
+  </app-page-header>
+
+  <div class="card">
+    @if (loading()) {
+      <app-state-message kind="loading" message="Loading trainers..." />
+    } @else if (failed()) {
+      <app-state-message kind="error" message="Could not load the trainers."
+        (retry)="reload()" />
+    } @else if (trainers().length === 0) {
+      <app-state-message kind="empty"
+        [message]="hasCriteria() ? 'No trainers match your search or filters.' : 'No trainers yet.'" />
+    } @else {
+      <app-trainer-table
+        [trainers]="trainers()"
+        [searchTerm]="search()"
+        [sortBy]="sortBy()"
+        [sortDirection]="sortDirection()"
+        (sortChange)="onSort($event)" />
+
+      <div class="card-footer">
+        <app-paginator
+          [total]="totalCount()"
+          [page]="page()"
+          [pageSize]="10"
+          (pageChange)="onPageChange($event)" />
+      </div>
+    }
+  </div>
+</div>

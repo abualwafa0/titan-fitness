@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">Quick Actions</h2>
+  </div>
+
+  <div class="card-body actions">
+    <button type="button" class="action" (click)="newMember()">
+      <span class="action-icon"><app-icon name="user-plus" [size]="16" /></span>
+      <span class="action-text">
+        <strong>New Member</strong>
+        <small>Start enrollment process</small>
+      </span>
+    </button>
+
+    <button type="button" class="action" (click)="manualCheckIn()">
+      <span class="action-icon"><app-icon name="user-check" [size]="16" /></span>
+      <span class="action-text">
+        <strong>Manual Check-in</strong>
+        <small>Verify member entry</small>
+      </span>
+    </button>
+
+    <button type="button" class="action" (click)="registerClass()">
+      <span class="action-icon"><app-icon name="calendar-plus" [size]="16" /></span>
+      <span class="action-text">
+        <strong>Register Class</strong>
+        <small>Book member into session</small>
+      </span>
+    </button>
+  </div>
+</div>

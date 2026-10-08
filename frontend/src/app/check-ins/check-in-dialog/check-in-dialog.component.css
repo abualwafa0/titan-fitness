@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+
+.spaced {
+  margin-bottom: 16px;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.counter {
+  align-self: flex-end;
+}

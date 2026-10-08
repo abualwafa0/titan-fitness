@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="card-header head">
+    <h2 class="card-title">Upcoming Classes</h2>
+    <a class="link-btn" routerLink="/classes">View Schedule</a>
+  </div>
+
+  @if (sessions().length === 0) {
+    <app-state-message kind="empty" message="No upcoming classes." />
+  } @else {
+    <ul class="list">
+      @for (session of sessions(); track session.sessionId) {
+        <li class="item" [class.running]="state(session) === 'InProgress'">
+          <span class="time nowrap">{{ time(session) }}</span>
+
+          <div class="main">
+            <strong [innerHTML]="session.className | highlight: searchTerm()"></strong>
+            @if (subtitle(session)) {
+              <span class="muted small" [innerHTML]="subtitle(session) | highlight: searchTerm()"></span>
+            }
+          </div>
+
+          <span class="muted small nowrap">{{ session.bookedPlaces }}/{{ session.capacityLimit }} Enrolled</span>
+
+          <app-status-badge [status]="badgeStatus(session)" />
+        </li>
+      }
+    </ul>
+  }
+</div>

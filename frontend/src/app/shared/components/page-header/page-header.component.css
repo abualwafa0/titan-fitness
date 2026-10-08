@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+.head-text {
+  min-width: 0;
+}
+
+.back-link {
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--navy-800);
+  text-decoration: none;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actions:empty {
+  display: none;
+}

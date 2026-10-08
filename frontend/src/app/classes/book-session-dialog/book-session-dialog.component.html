@@ -1,0 +1,75 @@
+<div class="dialog-header">
+  <h2 class="dialog-title">Book Session</h2>
+  <button type="button" class="icon-btn" aria-label="Close" (click)="cancel()">
+    <app-icon name="close" [size]="18" />
+  </button>
+</div>
+
+@if (loading()) {
+  <div class="dialog-body"><app-state-message kind="loading" message="Loading class..." /></div>
+} @else if (failed()) {
+  <div class="dialog-body">
+    <app-state-message kind="error" message="Could not load the class." (retry)="load()" />
+  </div>
+} @else {
+  @if (context(); as current) {
+    <div class="dialog-body" appAutofocus>
+      <div class="summary">
+        <strong class="class-name">{{ current.className }}</strong>
+        <span class="muted">{{ whenLabel() }}</span>
+
+        <div class="meta muted">
+          @if (current.trainerName) {
+            <span class="meta-item"><app-icon name="user" [size]="13" /> Trainer: {{ current.trainerName }}</span>
+          }
+          @if (current.studioName) {
+            <span class="meta-item"><app-icon name="pin" [size]="13" /> {{ current.studioName }}</span>
+          }
+        </div>
+
+        <span class="chip spots" [class.selected]="current.remainingPlaces > 0">
+          {{ current.remainingPlaces }} / {{ current.capacityLimit }} spots remaining
+        </span>
+      </div>
+
+      @if (current.remainingPlaces <= 0) {
+        <div class="banner banner-warning spaced" role="status">
+          This class is full. The member will join the waitlist.
+        </div>
+      }
+
+      @if (message(); as text) {
+        <div class="banner banner-error spaced" role="alert">{{ text }}</div>
+      }
+
+      <div class="fields">
+        <div class="field">
+          <span class="label">Select Member</span>
+          <app-member-autocomplete [(member)]="member" />
+          @if (memberError(); as error) {
+            <span class="error-text">{{ error }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label class="label" for="notes">
+            Special Requirements / Notes <span class="optional">(Optional)</span>
+          </label>
+          <textarea id="notes" class="textarea" rows="3" [attr.maxlength]="maxNotes"
+            [value]="notes()" (input)="onNotes($event)"
+            placeholder="e.g., Recovering from mild shoulder injury"></textarea>
+          <span class="counter">{{ notes().length }}/{{ maxNotes }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-outline" [disabled]="saving()" (click)="cancel()">
+        Cancel
+      </button>
+      <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="confirm()">
+        Confirm Booking
+      </button>
+    </div>
+  }
+}

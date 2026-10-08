@@ -1,0 +1,29 @@
+@if (membership(); as current) {
+  <div class="card">
+    <div class="card-body plan">
+      <span class="eyebrow">Current Plan</span>
+
+      <div class="summary">
+        <div class="info">
+          <h2 class="plan-name">{{ current.planName }}</h2>
+          <span class="muted renews">Renews: {{ current.endDate | date: 'MMM d, y' }}</span>
+        </div>
+
+        <div class="price">
+          <span class="amount">{{ current.pricePaid | currency }}</span>
+          @if (period()) {
+            <span class="muted">{{ period() }}</span>
+          }
+        </div>
+      </div>
+
+      <span class="freeze-wrap" [title]="freezeDisabledReason() ?? ''">
+        <button type="button" class="btn btn-outline btn-block" [disabled]="freezeDisabledReason() !== null"
+          (click)="freeze()">
+          <app-icon name="snowflake" [size]="16" />
+          <span>Freeze Membership</span>
+        </button>
+      </span>
+    </div>
+  </div>
+}

@@ -1,0 +1,116 @@
+<div class="booking-page">
+  <header class="top-bar">
+    <a class="back" routerLink="/classes" aria-label="Back to classes">
+      <app-icon name="arrow-left" [size]="18" />
+      <span class="top-title">Class Booking</span>
+    </a>
+
+    @if (member(); as current) {
+      <app-status-badge [status]="current.status ?? 'Inactive'"
+        [label]="(current.status ?? 'No') + ' Member'" />
+    }
+  </header>
+
+  <main class="content">
+    <nav class="crumbs muted" aria-label="Breadcrumb">
+      <a routerLink="/classes">Classes</a>
+      <span>&gt;</span>
+      <span>Booking</span>
+    </nav>
+
+    @switch (loadState()) {
+      @case ('loading') {
+        <div class="card"><app-state-message kind="loading" message="Loading class..." /></div>
+      }
+
+      @case ('notFound') {
+        <div class="card"><app-state-message kind="empty" message="Class not found." /></div>
+      }
+
+      @case ('error') {
+        <div class="card">
+          <app-state-message kind="error" message="Could not load the class." (retry)="load()" />
+        </div>
+      }
+
+      @default {
+        @if (session(); as current) {
+          <div class="card">
+            <div class="card-body stack-lg">
+              <div>
+                <h1 class="class-name">{{ current.className }}</h1>
+                <span class="muted">{{ whenLabel() }}</span>
+              </div>
+
+              <div class="two">
+                <div class="info">
+                  <span class="eyebrow">Trainer</span>
+                  <strong>{{ current.trainerName ?? 'To be announced' }}</strong>
+                </div>
+
+                <div class="info">
+                  <span class="eyebrow">Studio</span>
+                  <strong>{{ current.studioName ?? 'To be announced' }}</strong>
+                </div>
+              </div>
+
+              <div class="two">
+                <div class="info">
+                  <span class="eyebrow">Availability</span>
+                  <strong>
+                    {{ current.remainingPlaces }} spots left ({{ current.bookedPlaces }}/{{ current.capacityLimit }} booked)
+                  </strong>
+                  <div class="progress"><span [style.width.%]="percent()"></span></div>
+                </div>
+
+                <div class="info">
+                  <span class="eyebrow">Eligibility Status</span>
+
+                  @if (eligible()) {
+                    <div class="eligibility ok">
+                      <app-icon name="check" [size]="16" />
+                      <div>
+                        <strong>Active Membership</strong>
+                        <span>Cleared for booking</span>
+                      </div>
+                    </div>
+                  } @else {
+                    <div class="eligibility bad">
+                      <app-icon name="info" [size]="16" />
+                      <div>
+                        <strong>Not eligible: {{ memberStatusText() }}</strong>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              @if (message(); as text) {
+                <div class="banner banner-error" role="alert">{{ text }}</div>
+              }
+
+              <div class="field">
+                <label class="label" for="notes">
+                  Notes for the Trainer <span class="optional">(Optional)</span>
+                </label>
+                <textarea id="notes" class="textarea" rows="3" [attr.maxlength]="maxNotes"
+                  [value]="notes()" (input)="onNotes($event)"
+                  placeholder="Injuries, goals or anything the trainer should know..."></textarea>
+                <span class="counter">{{ notes().length }}/{{ maxNotes }}</span>
+              </div>
+            </div>
+
+            <div class="card-footer actions">
+              <button type="button" class="btn btn-outline" [disabled]="saving()" (click)="cancel()">
+                Cancel
+              </button>
+              <button type="button" class="btn btn-primary" [disabled]="!canConfirm()" (click)="confirm()">
+                Confirm Booking ✓
+              </button>
+            </div>
+          </div>
+        }
+      }
+    }
+  </main>
+</div>

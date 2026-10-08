@@ -1,0 +1,87 @@
+<div class="page">
+  <app-page-header title="Class Schedule" [subtitle]="subtitle()">
+    <button type="button" class="btn btn-primary" (click)="openAdd()">
+      <app-icon name="calendar-plus" [size]="16" />
+      <span>Add Class</span>
+    </button>
+  </app-page-header>
+
+  @if (bookingMember(); as booking) {
+    <div class="banner banner-info booking-banner" role="status">
+      <span>
+        Booking a class for <strong>{{ booking.fullName }}</strong>.
+        Choose a session and use <strong>Book Session</strong> from its ⋮ menu.
+      </span>
+      <button type="button" class="link-btn" (click)="clearBookFor()">Clear</button>
+    </div>
+  }
+
+  <div class="toolbar bar">
+    <select class="select branch" aria-label="Branch" [value]="branchValue()" (change)="onBranch($event)">
+      <option value="all">All Branches</option>
+      @for (branch of branches(); track branch.branchId) {
+        <option [value]="branch.branchId" [selected]="branchValue() === '' + branch.branchId">
+          {{ branch.branchName }}
+        </option>
+      }
+    </select>
+
+    <div class="date-nav">
+      <button type="button" class="icon-btn bordered" aria-label="Previous" (click)="shift(-1)">
+        <app-icon name="chevron-left" [size]="16" />
+      </button>
+
+      <input type="date" class="input date" aria-label="Date" [value]="date()" (change)="onDate($event)" />
+
+      <button type="button" class="icon-btn bordered" aria-label="Next" (click)="shift(1)">
+        <app-icon name="chevron-right" [size]="16" />
+      </button>
+
+      @if (!isToday()) {
+        <button type="button" class="btn btn-outline" (click)="goToToday()">Today</button>
+      }
+    </div>
+
+    <span class="spacer"></span>
+
+    <app-option-group variant="toggle" [options]="viewOptions" [value]="view()"
+      (valueChange)="onView($event)" />
+  </div>
+
+  <div class="layout">
+    <div class="card list">
+      <div class="card-header head">
+        <h2 class="card-title">{{ listTitle() }}</h2>
+        <span class="count-badge">{{ countLabel() }}</span>
+      </div>
+
+      @if (loading()) {
+        <app-state-message kind="loading" message="Loading sessions..." />
+      } @else if (failed()) {
+        <app-state-message kind="error" message="Could not load the schedule." (retry)="reload()" />
+      } @else if (groups().length === 0) {
+        <app-state-message kind="empty"
+          [message]="searchTerm() ? 'No classes match your search.' : 'No classes scheduled.'" />
+      } @else {
+        @for (group of groups(); track group.date) {
+          @if (group.label) {
+            <div class="day-title">{{ group.label }}</div>
+          }
+
+          @for (session of group.sessions; track session.sessionId) {
+            <app-session-row
+              [session]="session"
+              [searchTerm]="searchTerm()"
+              [showBranch]="allBranches()"
+              [showEndTime]="view() === 'week'"
+              (actionSelected)="onAction($event)" />
+          }
+        }
+      }
+    </div>
+
+    <app-capacity-overview
+      [totalBookings]="schedule()?.totalBookedPlaces ?? 0"
+      [fillRate]="schedule()?.capacityFilledPercentage ?? 0" />
+  </div>
+</div>

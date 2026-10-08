@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+.row-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.row-line dt,
+.row-line dd {
+  margin: 0;
+}
+
+.row-line dd {
+  font-weight: 600;
+}
+
+.highlight {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--navy-50);
+  color: var(--navy-800);
+  font-weight: 700;
+}
+
+.note {
+  margin: 0 0 18px;
+  font-size: 12px;
+}

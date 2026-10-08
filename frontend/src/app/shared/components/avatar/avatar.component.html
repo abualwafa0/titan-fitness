@@ -1,0 +1,12 @@
+<span
+  class="avatar"
+  [style.width.px]="size()"
+  [style.height.px]="size()"
+  [style.font-size.px]="size() * 0.38"
+>
+  @if (photoSrc(); as src) {
+    <img [src]="src" alt="" (error)="onImageError()" />
+  } @else {
+    {{ initials() }}
+  }
+</span>
